@@ -1,24 +1,44 @@
+# Monthly update PRs, one group per ecosystem for minor and patch. Semver-major version updates
+# are ignored (majors move by hand) and a release waits 7 days before it is proposed. Security
+# updates skip the schedule and the cooldown. .github/workflows/dependabot-auto-merge.yml merges
+# these PRs once CI is green.
 version: 2
 updates:
   - package-ecosystem: maven
     directory: /
     schedule:
-      interval: weekly
+      interval: monthly
+    cooldown:
+      default-days: 7
     groups:
       maven:
         patterns: ["*"]
+        update-types: ["minor", "patch"]
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
   - package-ecosystem: uv
     directory: /elt
     schedule:
-      interval: weekly
+      interval: monthly
+    cooldown:
+      default-days: 7
     groups:
       python:
         patterns: ["*"]
+        update-types: ["minor", "patch"]
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
   - package-ecosystem: npm
     directory: /web
     schedule:
-      interval: weekly
+      interval: monthly
+    cooldown:
+      default-days: 7
     ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
       # openapi-typescript 7 requires TypeScript 5 and typescript-eslint 8 stops at 6.0
       # (DECISIONS 41 and 62): only minor and patch updates of TypeScript.
       - dependency-name: typescript
@@ -26,29 +46,45 @@ updates:
     groups:
       web:
         patterns: ["*"]
+        update-types: ["minor", "patch"]
   - package-ecosystem: github-actions
     directory: /
     schedule:
-      interval: weekly
+      interval: monthly
+    cooldown:
+      default-days: 7
     groups:
       actions:
         patterns: ["*"]
+        update-types: ["minor", "patch"]
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
   - package-ecosystem: docker
     directory: /
     schedule:
-      interval: weekly
+      interval: monthly
+    cooldown:
+      default-days: 7
     ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
       # Stay on the Java 21 LTS line (DECISIONS 2): only patch/minor updates of the base images.
       - dependency-name: eclipse-temurin
         update-types: ["version-update:semver-major"]
     groups:
       images:
         patterns: ["*"]
+        update-types: ["minor", "patch"]
   - package-ecosystem: docker
     directory: /web
     schedule:
-      interval: weekly
+      interval: monthly
+    cooldown:
+      default-days: 7
     ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
       # The Node major of the build stage moves by hand, to an LTS line only and together with
       # web/.nvmrc, which CI reads (DECISIONS 61): only minor and patch updates of the node image.
       - dependency-name: node
@@ -56,3 +92,4 @@ updates:
     groups:
       web-images:
         patterns: ["*"]
+        update-types: ["minor", "patch"]
