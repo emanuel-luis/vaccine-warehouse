@@ -1,0 +1,13 @@
+# Advisories that osv-scanner (.github/workflows/security.yml) reports but this repo accepts for a
+# limited time. Each entry names the reason and an expiry; the scan fails again after that date.
+
+# minimatch < 11.0.1: denial of service through globparts amplification (medium). Only dev
+# tooling pulls it in: eslint ^10.2.5, @eslint/config-array ^10.2.4, typescript-estree ^10.2.2
+# and @redocly/openapi-core 5.1.9 (API client generation). The only fix is minimatch 11, a major
+# that removes makeRe(), Minimatch#regexp and the AST class, so it cannot be forced under them.
+# The patterns come from this repo's own config, not from users. Drop this entry when those
+# packages accept minimatch 11 (docs/DECISIONS.md #66).
+[[IgnoredVulns]]
+id = "GHSA-g3hv-75wg-m249"
+ignoreUntil = 2027-01-31
+reason = "dev-only minimatch via eslint, typescript-eslint and redocly; fix only in the 11.x major"
